@@ -1,2 +1,10 @@
-No restaurants yet!
-<a href='#'>Add a restaurant</a>
+<% if @restaurants.any?%>
+ <% @restaurants.each do|restaurant|%>
+  <h2><%= link_to restaurant.name, restaurant_path(restaurant) %></h2>
+  <%= link_to "Edit #{restaurant.name}", edit_restaurant_path(restaurant) %>
+  <%= link_to "Delete #{restaurant.name}", restaurant_path(restaurant), method: :delete %>
+ <% end %>
+<% else %>
+  <h1> No restaurants yet! </h1>
+ <% end %>
+<%= link_to "Add a restaurant", new_restaurant_path %>
