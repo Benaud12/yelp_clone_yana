@@ -2,11 +2,16 @@ require 'rails_helper'
 
 feature 'reviewing' do
 
-  before {Restaurant.create name: 'KFC'}
+  let!(:restaurant){ create :restaurant }
+  let(:user){ build :user }
 
-  scenario 'allows usersto leave a reviewusing a form' do
+  before do
+    sign_up(user)
+  end
+
+  scenario 'allows users to leave a reviewusing a form' do
     visit '/restaurants'
-    click_link 'Review KFC'
+    click_link "Review #{restaurant.name}"
     fill_in "Thoughts", with: "so so"
     select '3', from: 'Rating'
     click_button 'Leave Review'
@@ -17,11 +22,11 @@ feature 'reviewing' do
 
   scenario 'if restaurant is deleted reviews are also deleted' do
     visit '/restaurants'
-    click_link 'Review KFC'
+    click_link "Review #{restaurant.name}"
     fill_in "Thoughts", with: "so so"
     select '3', from: 'Rating'
     click_button 'Leave Review'
-    click_link 'Delete KFC'
+    click_link "Delete #{restaurant.name}"
     expect(page).not_to have_content "so so"
     expect(current_path).to eq '/restaurants'
   end
