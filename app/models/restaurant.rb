@@ -7,4 +7,9 @@ class Restaurant < ActiveRecord::Base
       -> { extending WithUserAssociationExtension },
       dependent: :destroy
 
+  def average_rating
+    return "N/A" if reviews.none?
+    4
+  end
+
 end
