@@ -8,8 +8,12 @@ class Restaurant < ActiveRecord::Base
       dependent: :destroy
 
   def average_rating
+    average_rating = 0
     return "N/A" if reviews.none?
-    4
+    self.reviews.each do |review|
+      average_rating += review.rating
+    end
+    average_rating / self.reviews.length
   end
 
 end
