@@ -10,7 +10,7 @@
         </li>
       <% end %>
     </ul>
-  <h3>Average Rating: <strong><%= ('★' * (restaurant.average_rating))+ '☆' * (5-restaurant.average_rating)  %></strong></h3>
+  <h3>Average Rating: <strong><%= restaurant.star_rating  %></strong></h3>
   <% else %>
     <p>No reviews.</p>
   <% end %>
