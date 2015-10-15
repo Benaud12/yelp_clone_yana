@@ -74,11 +74,12 @@ feature 'restaurants' do
 
   context 'editing restaurants' do
 
-    let!(:restaurant){ create :restaurant }
+    let(:restaurant){ build :restaurant }
     let(:user){ build :user }
 
     before do
       sign_up(user)
+      add_restaurant(restaurant.name)
     end
 
     scenario 'let a user edit a restaurant' do

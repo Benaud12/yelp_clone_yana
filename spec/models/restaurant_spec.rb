@@ -49,7 +49,6 @@ describe Restaurant, type: :model do
       it 'returns that rating' do
         restaurant = Restaurant.create(name: 'The Ivy')
         restaurant.reviews.create(rating: 5)
-        p restaurant.reviews
         expect(restaurant.average_rating).to eq 5
       end
     end
@@ -59,7 +58,6 @@ describe Restaurant, type: :model do
         restaurant = Restaurant.create(name: 'The Ivy')
         restaurant.reviews.create(rating: 5)
         restaurant.reviews.create(rating: 1)
-        p restaurant.reviews
         expect(restaurant.average_rating).to eq 3
       end
     end
