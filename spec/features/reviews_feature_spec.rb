@@ -41,7 +41,7 @@ feature 'reviewing' do
     fill_in "Thoughts", with: "Still so so"
     select '2', from: 'Rating'
     click_button 'Leave Review'
-    expect(page).to have_content 'You have alreay reviewed this restaurant'
+    expect(page).to have_content 'You have already reviewed this restaurant'
   end
 
 end
