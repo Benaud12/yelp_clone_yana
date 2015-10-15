@@ -12,8 +12,13 @@ class RestaurantsController < ApplicationController
     @restaurant = Restaurant.new
   end
 
+  def build_with_user(attributes = {}, user)
+    attributes[:user] ||= user
+    build(attributes)
+  end
+
   def create
-    @restaurant = Restaurant.new(restaurant_params)
+    @restaurant = current_user.restaurants.new(restaurant_params)
     if @restaurant.save
       redirect_to restaurants_path
     else
@@ -41,9 +46,13 @@ class RestaurantsController < ApplicationController
 
   def destroy
       @restaurant = Restaurant.find(params[:id])
-      @restaurant.destroy
-      flash[:notice] = 'Restaurant deleted successfully'
-      redirect_to restaurants_path
+      if current_user.id == @restaurant.user_id
+        @restaurant.destroy
+        flash[:notice] = 'Restaurant deleted successfully'
+        redirect_to restaurants_path
+      else
+        redirect_to restaurants_path, alert: "You can't delete other users restaurants"
+      end
   end
 
 

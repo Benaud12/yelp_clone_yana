@@ -93,11 +93,13 @@ feature 'restaurants' do
 
   context 'deleting restaurants' do
 
-    let!(:restaurant){ create :restaurant }
+    let(:restaurant){ build :restaurant }
     let(:user){ build :user }
+    let(:user2){ build :user2 }
 
     before do
       sign_up(user)
+      add_restaurant(restaurant.name)
     end
 
     scenario 'removes a restaurant when a user clicks a delete link' do
@@ -105,6 +107,15 @@ feature 'restaurants' do
       click_link "Delete #{restaurant.name}"
       expect(page).not_to have_content restaurant.name
       expect(page).to have_content 'Restaurant deleted successfully'
+    end
+
+    scenario "cannot delete restaurant you didn't add" do
+      add_restaurant("KFC")
+      click_link 'Sign out'
+      sign_up(user2)
+      click_link "Delete KFC"
+      expect(page).to have_content "You can't delete other users restaurants"
+      expect(page).to have_content "KFC"
     end
   end
 
