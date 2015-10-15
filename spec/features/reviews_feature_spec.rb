@@ -4,44 +4,37 @@ feature 'reviewing' do
 
   let!(:restaurant){ create :restaurant }
   let(:user){ build :user }
+  let(:user2){ build :user2 }
 
   before do
     sign_up(user)
   end
 
   scenario 'allows users to leave a review using a form' do
-    visit '/restaurants'
-    click_link "Review #{restaurant.name}"
-    fill_in "Thoughts", with: "so so"
-    select '3', from: 'Rating'
-    click_button 'Leave Review'
-
+    leave_review('so so',5)
     expect(current_path).to eq '/restaurants'
     expect(page).to have_content('so so')
   end
 
   scenario 'if restaurant is deleted reviews are also deleted' do
-    visit '/restaurants'
-    click_link "Review #{restaurant.name}"
-    fill_in "Thoughts", with: "so so"
-    select '3', from: 'Rating'
-    click_button 'Leave Review'
+    leave_review('so, so', 5)
     click_link "Delete #{restaurant.name}"
     expect(page).not_to have_content "so so"
     expect(current_path).to eq '/restaurants'
   end
 
   scenario 'users cannot review the same restaurant twice' do
-    visit '/restaurants'
-    click_link "Review #{restaurant.name}"
-    fill_in "Thoughts", with: "so so"
-    select '3', from: 'Rating'
-    click_button 'Leave Review'
-    click_link "Review #{restaurant.name}"
-    fill_in "Thoughts", with: "Still so so"
-    select '2', from: 'Rating'
-    click_button 'Leave Review'
+    leave_review('so, so', 4)
+    leave_review('still so, so', 4)
     expect(page).to have_content 'You have already reviewed this restaurant'
+  end
+
+  scenario 'displays an average rating for all reviews' do
+    leave_review('So so', '3')
+    click_link('Sign out')
+    sign_up(user2)
+    leave_review('Great', '5')
+    expect(page).to have_content('Average rating: 4')
   end
 
 end

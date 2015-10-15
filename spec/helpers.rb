@@ -9,4 +9,12 @@ module Helpers
     click_button 'Sign up'
   end
 
+  def leave_review(thoughts, rating)
+    visit '/restaurants'
+    click_link "Review #{restaurant.name}"
+    fill_in 'Thoughts', with: thoughts
+    select rating, from: 'Rating'
+    click_button 'Leave Review'
+  end
+
 end
