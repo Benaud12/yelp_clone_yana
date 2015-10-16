@@ -76,6 +76,7 @@ feature 'restaurants' do
 
     let(:restaurant){ build :restaurant }
     let(:user){ build :user }
+    let(:user2){ build :user2 }
 
     before do
       sign_up(user)
@@ -89,6 +90,16 @@ feature 'restaurants' do
      click_button 'Update Restaurant'
      expect(page).to have_content 'New Name'
      expect(current_path).to eq '/restaurants'
+    end
+
+    scenario "cannot edit restaurant you didn't add" do
+      click_link 'Sign out'
+      sign_up(user2)
+      click_link "Edit #{restaurant.name}"
+      fill_in 'Name', with: 'New Name'
+      click_button "Update Restaurant"
+      expect(page).to have_content "You can't edit other users restaurants"
+      expect(page).to have_content restaurant.name
     end
   end
 
