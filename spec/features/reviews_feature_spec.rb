@@ -30,11 +30,27 @@ feature 'reviewing' do
   end
 
   scenario 'displays an average rating for all reviews' do
-    leave_review('So so', '3')
+    leave_review('So so', 3)
     click_link('Sign out')
     sign_up(user2)
-    leave_review('Great', '5')
+    leave_review('Great', 5)
     expect(page).to have_content('Average Rating: ★★★★☆')
   end
 
+  context "deleting reviews" do
+    scenario "users can delete their reviews" do
+      leave_review('Great', 5)
+      click_link('Remove')
+      expect(page).not_to have_content('Great')
+    end
+
+    scenario "can't delete other users reviews" do
+      leave_review('Great', 5)
+      click_link('Sign out')
+      sign_up(user2)
+      click_link('Remove')
+      expect(page).to have_content "You can't remove other people's reviews"
+      expect(page).to have_content('Great')
+    end
+  end
 end
